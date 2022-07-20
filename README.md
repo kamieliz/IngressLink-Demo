@@ -46,13 +46,7 @@ when SERVER_CONNECTED {
 1. Clone the github repo with our example files
 
 ```other
-git clone https://github.com/F5Networks/k8s-bigip-ctlr.git/
-```
-
-2. Change the directory to IngressLink/Nodeport for the required yaml files
-
-```other
-cd k8s-bigip-ctlr/docs/config_examples/customResource/IngressLink/
+git clone https://github.com/kamieliz/IngressLink-Demo.git
 ```
 
 ### Section 3: Install the CIS Controller
