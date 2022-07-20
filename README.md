@@ -168,7 +168,7 @@ oc create -f ingresslink.yaml
 
 ```other
 $ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/coffee --insecure
-Server address: 10.12.0.18:80
+Server address: 10.244.0.18:80
 Server name: coffee-7586895968-r26zn
 ...
 ```
