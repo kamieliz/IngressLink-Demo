@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-bigip-ctlr-deployment
+  namespace: kube-system
+spec:
+  # DO NOT INCREASE REPLICA COUNT
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-bigip-ctlr-deployment
+  template:
+    metadata:
+      labels:
+        app: k8s-bigip-ctlr-deployment
+    spec:
+      # Name of the Service Account bound to a Cluster Role with the required
+      # permissions
+      containers:
+        - name: bigip-ctlr
+		  terminationMessagePath: /dev/termination-log
+          image: "f5networks/k8s-bigip-ctlr:latest"
+          env:
+            - name: BIGIP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: username
+            - name: BIGIP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: password
+          imagePullPolicy: Always
+          terminationMessagePolicy: File
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--bigip-username=$(BIGIP_USERNAME)",
+            "--bigip-password=$(BIGIP_PASSWORD)",
+            "--bigip-url=https://10.1.1.12:8443",
+            "--bigip-partition=<name_of_partition>",
+            "--pool-member-type=nodeport",
+            "--insecure",
+            "--custom-resource-mode=true",
+			"--node-label-selector=f5role=nic",
+            # for secure communication provide the internal ca certificates using config-map with below option and remove insecure parameter
+            #"--trusted-certs-cfgmap=<namespace/configmap>",
+          ]
+	  RestartPolicy: Always
+	  terminationGracePeriodSeconds: 30
+	  dnsPolicy: ClusterFirst
+      serviceAccount: bigip-ctlr
+      serviceAccountName: bigip-ctlr
+      securityContext: {}
+      schedulerName: default-scheduler
