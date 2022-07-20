@@ -5,9 +5,7 @@
 The purpose of this lab guide is to demonstrate Kubernetes Ingress using IngressLink. Ingresslink provides you with modern container application workloads that use both BIG-IP Container Ingress Services and NGINX Ingress Controller for Kubernetes. This control plane solution offers a unified method of working with both technologies from a single interface offering the best of BIG-IP and NGINX.
 
 This architecture diagram demonstrates IngressLink using NodePort.
-
-![Image](https://res.craft.do/user/full/d367a179-adcb-7ce8-0b02-ba52d2a7c917/doc/375A4A4D-2C93-4C0E-9389-CB2737F41408/B8F8E71E-76AA-465A-B1D7-6F38D8863E9F_2/Image)
-
+![image](https://user-images.githubusercontent.com/4666871/180045320-126d12fb-5571-4503-b40d-c0afcc0ee6ed.png)
 ## IngressLink Compatibility Matrix
 
 Minimum version to use IngressLink:
