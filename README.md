@@ -189,7 +189,9 @@ cafe-ingress   cafe.example.com   10.1.1.12    80, 443   115s
 
 # Resources
 
-[Using with F5 BIG-IP | NGINX Ingress Controller](https://docs.nginx.com/nginx-ingress-controller/f5-ingresslink/)
+[Using with F5 BIG-IP Container Ingress Services | NGINX Ingress Controller](https://docs.nginx.com/nginx-ingress-controller/f5-ingresslink/)
 
-[OpenShift](https://clouddocs.f5.com/containers/latest/userguide/openshift/#installing-cis-manually)
+[OpenShift - Installing CIS manually](https://clouddocs.f5.com/containers/latest/userguide/openshift/#installing-cis-manually)
+
+[IngressLink User Guide](https://clouddocs.f5.com/containers/latest/userguide/ingresslink/)
 
