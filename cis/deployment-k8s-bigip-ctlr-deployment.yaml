@@ -1,0 +1,188 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: k8s-bigip-ctlr-deployment
+  namespace: kube-system
+  uid: c60ff5a7-9789-435e-a732-ed9fe48b18d8
+  resourceVersion: '17842317'
+  generation: 3
+  creationTimestamp: '2022-03-08T23:23:15Z'
+  annotations:
+    deployment.kubernetes.io/revision: '3'
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"k8s-bigip-ctlr-deployment","namespace":"kube-system"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"k8s-bigip-ctlr-deployment"}},"template":{"metadata":{"labels":{"app":"k8s-bigip-ctlr-deployment"}},"spec":{"containers":[{"args":["--bigip-username=$(BIGIP_USERNAME)","--bigip-password=$(BIGIP_PASSWORD)","--bigip-url=https://10.1.1.12:8443","--bigip-partition=ocp","--pool-member-type=nodeport","--insecure","--log-as3-response=true","--custom-resource-mode=true","--node-label-selector=f5role=nic"],"command":["/app/bin/k8s-bigip-ctlr"],"env":[{"name":"BIGIP_USERNAME","valueFrom":{"secretKeyRef":{"key":"username","name":"bigip-login"}}},{"name":"BIGIP_PASSWORD","valueFrom":{"secretKeyRef":{"key":"password","name":"bigip-login"}}}],"image":"f5networks/k8s-bigip-ctlr:latest","name":"bigip-ctlr"}],"serviceAccountName":"bigip-ctlr"}}}}
+  managedFields:
+    - manager: kubectl-client-side-apply
+      operation: Update
+      apiVersion: apps/v1
+      time: '2022-03-08T23:23:15Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+        'f:spec':
+          'f:progressDeadlineSeconds': {}
+          'f:replicas': {}
+          'f:revisionHistoryLimit': {}
+          'f:selector': {}
+          'f:strategy':
+            'f:rollingUpdate':
+              .: {}
+              'f:maxSurge': {}
+              'f:maxUnavailable': {}
+            'f:type': {}
+          'f:template':
+            'f:metadata':
+              'f:labels':
+                .: {}
+                'f:app': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"bigip-ctlr"}':
+                  'f:image': {}
+                  'f:terminationMessagePolicy': {}
+                  .: {}
+                  'f:resources': {}
+                  'f:args': {}
+                  'f:command': {}
+                  'f:env':
+                    .: {}
+                    'k:{"name":"BIGIP_PASSWORD"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                    'k:{"name":"BIGIP_USERNAME"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                  'f:terminationMessagePath': {}
+                  'f:imagePullPolicy': {}
+                  'f:name': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:serviceAccount': {}
+              'f:serviceAccountName': {}
+              'f:terminationGracePeriodSeconds': {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2022-07-20T05:10:34Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:deployment.kubernetes.io/revision': {}
+        'f:status':
+          'f:availableReplicas': {}
+          'f:conditions':
+            .: {}
+            'k:{"type":"Available"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Progressing"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:observedGeneration': {}
+          'f:readyReplicas': {}
+          'f:replicas': {}
+          'f:updatedReplicas': {}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-bigip-ctlr-deployment
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: k8s-bigip-ctlr-deployment
+    spec:
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: bigip-ctlr
+          command:
+            - /app/bin/k8s-bigip-ctlr
+          env:
+            - name: BIGIP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: username
+            - name: BIGIP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: password
+          imagePullPolicy: Always
+          terminationMessagePolicy: File
+          image: 'f5networks/k8s-bigip-ctlr:latest'
+          args:
+            - '--bigip-username=$(BIGIP_USERNAME)'
+            - '--bigip-password=$(BIGIP_PASSWORD)'
+            - '--bigip-url=https://10.1.1.12:8443'
+            - '--bigip-partition=ocp'
+            - '--pool-member-type=nodeport'
+            - '--insecure'
+            - '--log-as3-response=true'
+            - '--custom-resource-mode=true'
+            - '--node-label-selector=f5role=nic'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: bigip-ctlr
+      serviceAccount: bigip-ctlr
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 3
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2022-03-08T23:57:19Z'
+      lastTransitionTime: '2022-03-08T23:23:15Z'
+      reason: NewReplicaSetAvailable
+      message: >-
+        ReplicaSet "k8s-bigip-ctlr-deployment-68db659df4" has successfully
+        progressed.
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2022-07-20T05:10:34Z'
+      lastTransitionTime: '2022-07-20T05:10:34Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
