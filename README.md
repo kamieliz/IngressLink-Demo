@@ -21,9 +21,9 @@ Minimum version to use IngressLink:
 
 ## Configure F5 IngressLink with OpenShift
 
-### Section 1: Create the  Proxy Protocol iRule on Bigip
+### Section 1: Verify the  Proxy Protocol iRule on Bigip
 
-Proxy Protocol is required by NGINX to provide the applications PODs with the original client IPs. Use the following steps to configure the Proxy_Protocol_iRule
+Proxy Protocol is required by NGINX to provide the applications PODs with the original client IPs. 
 
 1. Login to BIG-IP GUI
 
@@ -33,9 +33,7 @@ password: Freiburg123
 ```
 
 2. On the Main tab, click Local Traffic > iRules.
-3. Click **Create**.
-4. In the Name field, type name as "Proxy_Protocol_iRule".
-5. In the Definition field, Copy the definition from "Proxy_Protocol_iRule" from below.
+3. View the rule Proxy_Protocol_iRule and verify that the definition matches what is listed below.
 
 ```other
 when SERVER_CONNECTED {
@@ -65,40 +63,17 @@ oc login -u f5admin -p f5admin
 cd IngressLink-Demo/
 ```
 
-### Section 3: Install the CIS Controller
+### Section 3: Deploy the CIS Controller
+Container Ingress Services (CIS) can be deployed on Kubernetes and OpenShift platform. CIS installation may differ based on the resources (for example: ConfigMap, Ingress, Routes, and CRD) used to expose the Kubernetes services. CIS Installation also depends on BIG-IP deployment and Kubernetes cluster networking. To find out more about installing CIS, check out the documentation [here](https://clouddocs.f5.com/containers/latest/userguide/cis-helm.html).
 
-1. Add BIG-IP credentials as Kubernetes Secrets
-
-```other
-oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=Freiburg123
-```
-
-2. Create a service account for deploying CIS
+1. Review the bigip address, partition, and other details in CIS deployment file
 
 ```other
-oc create serviceaccount bigip-ctlr -n kube-system
-```
-
-3. Create a cluster role and cluster role binding
-
-```other
-oc create -f cis/openshift_rbac.yaml
-```
-
-4. For Openshift, you need to create the Cluster admin privileges for the BIG-IP service account user
-
-```other
-oc adm policy add-cluster-role-to-user cluster-admin -z bigip-ctlr -n kube-system
-```
-
-5. Review the bigip address, partition, and other details in CIS deployment file
-
-```other
-nano cis/cis-deployment.yaml
+nano cis/deployment-k8s-bigip-ctlr-deployment.yaml
 ```
 
 ```other
-"—bigip-url=10.1.1.12:8443"
+"—bigip-url=https://10.1.1.12:8443"
 
 "—bigip-partition=ocp"
 
@@ -107,13 +82,7 @@ nano cis/cis-deployment.yaml
 "—custom-resource-mode=true"
 ```
 
-6. Create a CIS deployment
-
-```other
-oc create -f cis/cis-deployment.yaml
-```
-
-7. Verify CIS Deployment
+2. Verify CIS Deployment
 
 ```other
 oc get pods -n kube-system
@@ -121,37 +90,54 @@ NAME                                                       READY   STATUS    RES
 k8s-bigip-ctlr-deployment-fd86c54bb-w6phz                  1/1     Running   0          41s
 ```
 
-8. View CIS logs (note: CIS log level is currently set to DEBUG)
-
-```other
-oc logs -f deploy/k8s-bigip-ctlr-deployment -n kube-system | grep --color=auto -i '\[debug'
-```
 
 ### Section 4: Customize NGINX Configuration
 
-1. In phase I, we configured NGINX Ingress Controller and the following components are already installed in this lab:
+In phase I, we configured NGINX Ingress Controller and the following components are already installed in this lab:
    1. a namespace and a service account for Ingress Controller
    2. cluster role and cluster role binding for the IC service account
    3. a secret with a TLS certificate and a key for the default server
 
-You can review these yaml files in the NGINX config folder
+You can review these yaml files in the NGINX config folder and find additional documentation [here](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/)
 
-1. Create a config map for customizing NGINX configuration
+1. Edit the config map created for NGINX Ingress Controller
 
 ```other
-oc create -f nginx-config/nginx-config.yaml
+nano ~/kubernetes-ingress/deployments/common/nginx-config.yaml
+```
+Under the data section, add:
+
+```other
+data:
+  proxy-protocol: "True"
+  real-ip-header: "proxy_protocol"
+  set-real-ip-from:"0.0.0.0/0"
+```
+Apply the changes
+
+```other
+Oc apply -f ~/kubernetes-ingress/deployments/common/nginx-config.yaml
 ```
 
-2. Create Ingress Controller deployment. When you run the IC by using a Deployment, K8s will create one ingress controller pod
+2. Edit the ingress controller deployment to add ingresslink arguments
 
 ```other
-oc create -f nginx-config/nginx-ingress.yaml
+Nano ~/kubernetes-ingress/deployments/deployment/nginx-ingress.yaml
+```
+Under the args section, add:
+```other
+- -ingresslink=nginx-ingress
+- -report-ingress-status
+```
+Apply changes
+```other
+oc apply -f ~/kubernetes-ingress/deployments/deployment/nginx-ingress.yaml
 ```
 
-3. Create a service for the Ingress Controller pods for ports 80 and 443
+3. Review previously created service for the Ingress Controller pods
 
 ```other
-oc create -f nginx-config/nginx-service.yaml
+nano ~/1_kubernetes-ingress/deployments/service/nodeport_custom.yaml
 ```
 
 4. Verify NGINX ingress deployment
