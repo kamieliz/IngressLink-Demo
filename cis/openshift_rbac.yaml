@@ -48,7 +48,7 @@
    - watch
    - update
 
- ---
+---
  apiVersion: v1
  kind: ClusterRoleBinding
  metadata:
