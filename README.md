@@ -19,13 +19,19 @@ Minimum version to use IngressLink:
 - NGINX+ IC [repo](https://github.com/kamieliz/IngressLink-Demo/tree/main/nginx-config)
 - Product Documentation [documentation](https://clouddocs.f5.com/containers/latest/userguide/ingresslink/)
 
-## Configure F5 IngressLink with Kubernetes
+## Configure F5 IngressLink with OpenShift
 
 ### Section 1: Create the  Proxy Protocol iRule on Bigip
 
 Proxy Protocol is required by NGINX to provide the applications PODs with the original client IPs. Use the following steps to configure the Proxy_Protocol_iRule
 
 1. Login to BIG-IP GUI
+
+```other
+username: admin
+password: Freiburg123
+```
+
 2. On the Main tab, click Local Traffic > iRules.
 3. Click **Create**.
 4. In the Name field, type name as "Proxy_Protocol_iRule".
