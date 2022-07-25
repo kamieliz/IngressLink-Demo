@@ -52,10 +52,17 @@ when SERVER_CONNECTED {
 ```other
 git clone https://github.com/kamieliz/IngressLink-Demo.git
 ```
+
 2. Login to the OpenShift container platform from console
 
 ```other
 oc login -u f5admin -p f5admin
+```
+
+3. Change directory to project folder
+
+```other
+cd IngressLink-Demo/
 ```
 
 ### Section 3: Install the CIS Controller
@@ -167,7 +174,15 @@ virtualServerAddress: "10.1.1.12"
 oc create -f ingresslink.yaml
 ```
 
-3. Access the application to test traffic by running the following command
+3. To test the integration, deploy a sample application:
+
+```other
+oc create -f ingress-example/cafe.yaml
+oc create -f ingress-example/cafe-secret.yaml
+oc create -f ingress-example/cafe-ingress.yaml
+```
+
+. Access the application to test traffic by running the following command
 
 ```other
 $ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/coffee --insecure
@@ -176,7 +191,7 @@ Server name: coffee-7586895968-r26zn
 ...
 ```
 
-4. Check the status of the cafe-ingress, you will see the IP of the VirtualServerAddress
+. Check the status of the cafe-ingress, you will see the IP of the VirtualServerAddress
 
 ```other
 $ oc get ing cafe-ingress
