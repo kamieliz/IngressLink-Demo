@@ -73,7 +73,7 @@ oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-a
 oc create -f cis/customresourcedefinition.yaml
 ```
 
-5. Update the bigip address, partition, and other details in CIS deployment file
+5. Review the bigip address, partition, and other details in CIS deployment file
 
 ```other
 nano cis/cis-deployment.yaml
@@ -89,13 +89,7 @@ nano cis/cis-deployment.yaml
 "—custom-resource-mode=true"
 ```
 
-6. Deploy Container Ingress Services
-
-```other
-oc create -f cis/cis-deployment.yaml
-```
-
-7. Verify CIS Deployment
+6. Verify CIS Deployment
 
 ```other
 oc get pods -n kube-system
@@ -103,7 +97,7 @@ NAME                                                       READY   STATUS    RES
 k8s-bigip-ctlr-deployment-fd86c54bb-w6phz                  1/1     Running   0          41s
 ```
 
-8. View CIS logs (note: CIS log level is currently set to DEBUG)
+7. View CIS logs (note: CIS log level is currently set to DEBUG)
 
 ```other
 oc logs -f deploy/k8s-bigip-ctlr-deployment -n kube-system | grep --color=auto -i '\[debug'
