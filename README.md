@@ -46,6 +46,11 @@ when SERVER_CONNECTED {
 ```other
 git clone https://github.com/kamieliz/IngressLink-Demo.git
 ```
+2. Login to the OpenShift container platform from console
+
+```other
+oc login -u f5admin -p f5admin
+```
 
 ### Section 3: Install the CIS Controller
 
