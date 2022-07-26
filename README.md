@@ -40,7 +40,7 @@ when SERVER_CONNECTED {
       TCP::respond "PROXY TCP[IP::version] [IP::client_addr] [clientside {IP::local_addr}] [TCP::client_port] [clientside {TCP::local_port}]\r\n"
 }
 ```
-![image](https://user-images.githubusercontent.com/4666871/181070766-64a46385-ee84-41c2-bc04-81d0fbe609f9.png)
+![image](https://user-images.githubusercontent.com/4666871/181071654-54b680da-bc31-4b8f-a610-b841c3aeebb1.png)
 
 6. Click **Update**.
 
