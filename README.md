@@ -75,7 +75,9 @@ oc apply -f https://raw.githubusercontent.com/F5Networks/k8s-bigip-ctlr/master/d
 2. Create a cluster role and cluster role binding on the OpenShift cluster
 
 ```other
-oc apply -f https://raw.githubusercontent.com/F5Networks/k8s-bigip-ctlr/master/docs/config_examples/rbac/clusterrole.yaml
+oc apply -f cis/openshift_rbac.yaml
+
+oc adm policy add-cluster-role-to-user cluster-admin -z bigip-ctlr -n kube-system
 ```
 
 3. Review the bigip address, partition, and other details in CIS deployment file
@@ -112,12 +114,12 @@ In phase I, we configured NGINX Ingress Controller and the following components 
 
 You can review these yaml files in the NGINX config folder and find additional documentation [here](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/)
 
-1. Edit the config map created for NGINX Ingress Controller
+1. View the config map created for NGINX Ingress Controller
 
 ```other
-nano ~/kubernetes-ingress/deployments/common/nginx-config.yaml
+nano ~/3_demo/webapp_OIDC/8_nginx-config.yaml
 ```
-Under the data section, add:
+Verify that the following is located under the data section:
 
 ```other
 data:
@@ -125,18 +127,18 @@ data:
   real-ip-header: "proxy_protocol"
   set-real-ip-from:"0.0.0.0/0"
 ```
-Apply the changes
+Apply the config map
 
 ```other
-Oc apply -f ~/kubernetes-ingress/deployments/common/nginx-config.yaml
+Oc apply -f ~/3_demo/webapp_OIDC/8_nginx-config.yaml
 ```
 
 2. Edit the ingress controller deployment to add ingresslink arguments
 
 ```other
-Nano ~/kubernetes-ingress/deployments/deployment/nginx-ingress.yaml
+Nano 
 ```
-Under the args section, add:
+Under the args section, add the following:
 ```other
 - -ingresslink=nginx-ingress
 - -report-ingress-status
@@ -195,7 +197,15 @@ Server name: coffee-7586895968-r26zn
 ...
 ```
 
-. Check the status of the cafe-ingress, you will see the IP of the VirtualServerAddress
+Access the tea application similarly:
+```other
+$ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/tea --insecure
+Server address: 10.244.5.15:8080
+Server name: tea-6fb46d899f-9j4zj
+...
+```
+
+. Check the status of the cafe-ingress, you should see the IP of the VirtualServerAddress
 
 ```other
 $ oc get ing cafe-ingress
@@ -210,4 +220,10 @@ cafe-ingress   cafe.example.com   10.1.1.12    80, 443   115s
 [OpenShift - Installing CIS manually](https://clouddocs.f5.com/containers/latest/userguide/openshift/#installing-cis-manually)
 
 [IngressLink User Guide](https://clouddocs.f5.com/containers/latest/userguide/ingresslink/)
+
+[Installing NGINX Ingress Controller with Manifests](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/)
+
+[F5 IngressLink using NodePort demo](https://www.youtube.com/watch?v=wi7vVZWHyxE&ab_channel=MarkDittmer)
+
+
 
