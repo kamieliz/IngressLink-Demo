@@ -130,22 +130,23 @@ data:
 Apply the config map
 
 ```other
-Oc apply -f ~/3_demo/webapp_OIDC/8_nginx-config.yaml
+oc apply -f ~/3_demo/webapp_OIDC/8_nginx-config.yaml
 ```
 
 2. Edit the ingress controller deployment to add ingresslink arguments
 
 ```other
-Nano 
+nano nginx-config/deployment-nginx-ingress.yaml
 ```
-Under the args section, add the following:
+Under the args section, uncomment the following:
+
 ```other
 - -ingresslink=nginx-ingress
 - -report-ingress-status
 ```
 Apply changes
 ```other
-oc apply -f ~/kubernetes-ingress/deployments/deployment/nginx-ingress.yaml
+oc apply -f nginx-config/deployment-nginx-ingress.yaml
 ```
 
 3. Create an IngressClass resource:
