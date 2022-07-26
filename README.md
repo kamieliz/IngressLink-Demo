@@ -113,11 +113,12 @@ k8s-bigip-ctlr-deployment-fd86c54bb-w6phz                  1/1     Running   0  
 ### Section 4: Customize NGINX Configuration
 
 In phase I, we configured NGINX Ingress Controller and the following components are already installed in this lab:
-   1. a namespace and a service account for Ingress Controller
-   2. cluster role and cluster role binding for the IC service account
-   3. a secret with a TLS certificate and a key for the default server
+   - a namespace and a service account for Ingress Controller
+   - cluster role and cluster role binding for the IC service account
+   - a secret with a TLS certificate and a key for the default server
+   - Custom resource definitions for [Virtual Server and Virtual ServerRoute](https://docs.nginx.com/nginx-ingress-controller/configuration/virtualserver-and-virtualserverroute-resources), [TransportServer](https://docs.nginx.com/nginx-ingress-controller/configuration/transportserver-resource), [Policy](https://docs.nginx.com/nginx-ingress-controller/configuration/policy-resource) and [GlobalConfiguration](https://docs.nginx.com/nginx-ingress-controller/configuration/global-configuration/globalconfiguration-resource) resources.
 
-You can review these yaml files in the NGINX config folder and find additional documentation [here](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/)
+You can review these yaml files in the NGINX config folder and find additional documentation [here](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/) on the installation process.
 
 1. View the config map created for NGINX Ingress Controller
 
