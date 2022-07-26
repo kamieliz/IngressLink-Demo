@@ -66,21 +66,25 @@ cd IngressLink-Demo/
 ### Section 3: Deploy the CIS Controller
 Container Ingress Services (CIS) can be deployed on Kubernetes and OpenShift platform. CIS installation may differ based on the resources (for example: ConfigMap, Ingress, Routes, and CRD) used to expose the Kubernetes services. CIS Installation also depends on BIG-IP deployment and Kubernetes cluster networking. To find out more about installing CIS, check out the documentation [here](https://clouddocs.f5.com/containers/latest/userguide/cis-helm.html).
 
-1. Create IngressLink Custom Resource definition:
+1. Create IngressLink Custom Resource definition schema:
 
 ```other
 oc apply -f https://raw.githubusercontent.com/F5Networks/k8s-bigip-ctlr/master/docs/config_examples/customResourceDefinitions/customresourcedefinitions.yml
 ```
 
-2. Create a cluster role and cluster role binding on the OpenShift cluster
+2. Create a cluster role and cluster role binding on the OpenShift cluster. You can narrow the permissions down to specific resources, namespaces, and more to suit your needs.
 
 ```other
 oc apply -f cis/openshift_rbac.yaml
+```
 
+3. For Openshift, you need to create the Cluster admin privileges for the BIG-IP service account user with the following command:
+
+```other
 oc adm policy add-cluster-role-to-user cluster-admin -z bigip-ctlr -n kube-system
 ```
 
-3. Review the bigip address, partition, and other details in CIS deployment file
+4. Review the bigip address, partition, and other details in CIS deployment file. Custom resource mode needs to be set to true for IngressLink. We are also deploying in nodeport mode so we want to set our pool members to nodeport type.
 
 ```other
 nano cis/deployment-k8s-bigip-ctlr-deployment.yaml
@@ -96,7 +100,7 @@ nano cis/deployment-k8s-bigip-ctlr-deployment.yaml
 "—custom-resource-mode=true"
 ```
 
-4. Verify CIS Deployment
+5. Verify CIS Deployment
 
 ```other
 oc get pods -n kube-system
@@ -119,7 +123,8 @@ You can review these yaml files in the NGINX config folder and find additional d
 ```other
 nano ~/3_demo/webapp_OIDC/8_nginx-config.yaml
 ```
-Verify that the following is located under the data section:
+
+2. Verify that the following is located under the data section:
 
 ```other
 data:
@@ -127,7 +132,8 @@ data:
   real-ip-header: "proxy_protocol"
   set-real-ip-from:"0.0.0.0/0"
 ```
-Apply the config map
+
+3. Apply the config map resource for customizing NGINX configuration
 
 ```other
 oc apply -f ~/3_demo/webapp_OIDC/8_nginx-config.yaml
@@ -145,19 +151,20 @@ Under the args section, uncomment the following:
 - -report-ingress-status
 ```
 
-3. Create an IngressClass resource:
+3. Create an IngressClass resource (for Kubernetes >= 1.18):
+
 ```other
 oc apply -f nginx-config/ingress-class.yaml
 ```
 **Note**: The Ingress Controller will fail to start without an IngressClass resource
 
-4. Review previously created service for the Ingress Controller pods
+4. Review Nodeport service for the Ingress Controller pods. This service is used to access the Ingress Controller from ports 80 and 443. 
 
 ```other
-nano ~/1_kubernetes-ingress/deployments/service/nodeport_custom.yaml
+nano nginx-config/service-nginx-ingress.yaml
 ```
 
-5. Verify NGINX ingress deployment
+5. Verify NGINX ingress deployment. When you run the Ingress Controller by using a Deployment, by default, Kubernetes will create one Ingress Controller pod.
 
 ```other
 oc get pods -n nginx-ingress
@@ -167,7 +174,7 @@ nginx-ingress-744d95cb86-xk2vx   1/1     Running   0          16s
 
 ### Section 5: Create an IngressLink Resource
 
-1. Add the virtual server address to the BIG-IP to ingresslink yaml file
+1. Update the `virtualServerAddress` parameter in the ingresslink.yaml resource. This IP address will be used to configure the BIG-IP device. It will be used to accept traffic and load balance it among the NGINX Ingress Controller pods. 
 
 ```other
 nano ingresslink.yaml
@@ -177,21 +184,33 @@ nano ingresslink.yaml
 virtualServerAddress: "10.1.1.12"
 ```
 
-2. Create IngressLink resource
+**Note**: The name of the app label selector in IngressLink resource should match the labels of the nginx-ingress service from section 4.
+
+2. Apply updates to the IngressLink resource
 
 ```other
-oc create -f ingresslink.yaml
+oc apply -f ingresslink.yaml
 ```
 
 3. To test the integration, deploy a sample application:
 
 ```other
-oc create -f ingress-example/cafe.yaml
-oc create -f ingress-example/cafe-secret.yaml
-oc create -f ingress-example/cafe-ingress.yaml
+oc apply -f ingress-example/cafe.yaml
 ```
 
-4. Access the application to test traffic by running the following command
+4. Create a secret with an SSL certificate and a key:
+
+```other
+oc apply -f ingress-example/cafe-secret.yaml
+```
+
+5. Create an Ingress resource:
+
+```other
+oc apply -f ingress-example/cafe-ingress.yaml
+```
+
+4. The Ingress Controller pods are behind the IP configured in step 1. Access the coffee service to test traffic by running the following command
 
 ```other
 $ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/coffee --insecure
@@ -200,7 +219,8 @@ Server name: coffee-7586895968-r26zn
 ...
 ```
 
-Access the tea application similarly:
+5. Access the tea service similarly:
+
 ```other
 $ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/tea --insecure
 Server address: 10.244.5.15:8080
@@ -208,13 +228,12 @@ Server name: tea-6fb46d899f-9j4zj
 ...
 ```
 
-5. Check the status of the cafe-ingress, you should see the IP of the VirtualServerAddress
+6. You can also access the application from the browser
 
-```other
-$ oc get ing cafe-ingress
-NAME           HOSTS              ADDRESS         PORTS     AGE
-cafe-ingress   cafe.example.com   10.1.1.12    80, 443   115s
-```
+
+
+7. View the requests in the NGINX dashboard
+
 
 # Resources
 
