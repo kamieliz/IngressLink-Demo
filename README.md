@@ -1,4 +1,4 @@
-# Phase II - IngressLink
+# Phase II - IngressLink - Openshift
 
 # Simplifying Kubernetes Ingress using F5 Technologies
 
@@ -40,8 +40,9 @@ when SERVER_CONNECTED {
       TCP::respond "PROXY TCP[IP::version] [IP::client_addr] [clientside {IP::local_addr}] [TCP::client_port] [clientside {TCP::local_port}]\r\n"
 }
 ```
+![image](https://user-images.githubusercontent.com/4666871/181070766-64a46385-ee84-41c2-bc04-81d0fbe609f9.png)
 
-6. Click **Finished**.
+6. Click **Update**.
 
 ### Section 2: Install required files
 
@@ -51,7 +52,7 @@ when SERVER_CONNECTED {
 git clone https://github.com/kamieliz/IngressLink-Demo.git
 ```
 
-2. Login to the OpenShift container platform from console
+2. Login to the OpenShift container platform from console:
 
 ```other
 oc login -u f5admin -p f5admin
@@ -230,10 +231,11 @@ Server name: tea-6fb46d899f-9j4zj
 
 6. You can also access the application from the browser
 
+![image](https://user-images.githubusercontent.com/4666871/181070412-2bcfeb09-5bff-42ab-8568-453cc3dbeec1.png)
 
+7. View the requests in the NGINX dashboard under cafe.example.com
 
-7. View the requests in the NGINX dashboard
-
+![image](https://user-images.githubusercontent.com/4666871/181070590-656c1b4a-d23d-472c-a0d7-81365d3979da.png)
 
 # Resources
 
