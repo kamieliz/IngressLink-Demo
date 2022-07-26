@@ -120,7 +120,7 @@ In phase I, we configured NGINX Ingress Controller and the following components 
 
 You can review these yaml files in the NGINX config folder and find additional documentation [here](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/) on the installation process.
 
-1. View the config map created for NGINX Ingress Controller
+1. View the config map created for NGINX Ingress Controller. In the ConfigMap, enable the Proxy protocol, which the BIG-IP system will use to pass the client IP and port information to NGINX. For the `set-real-ip-from` key, use the subnet of the IP, which the BIG-IP system uses to send traffic to NGINX:
 
 ```other
 nano ~/3_demo/webapp_OIDC/8_nginx-config.yaml
@@ -141,7 +141,7 @@ data:
 oc apply -f ~/3_demo/webapp_OIDC/8_nginx-config.yaml
 ```
 
-2. Edit the ingress controller deployment to add ingresslink arguments
+2. Edit the ingress controller deployment to add ingresslink arguments. Ingresslink references the name of the IngressLink resource and report-ingress-status enables [reporting Ingress statuses](https://docs.nginx.com/nginx-ingress-controller/configuration/global-configuration/reporting-resources-status#ingress-resources)
 
 ```other
 nano nginx-config/deployment-nginx-ingress.yaml
@@ -152,6 +152,7 @@ Under the args section, uncomment the following:
 - -ingresslink=nginx-ingress
 - -report-ingress-status
 ```
+**Note**: the label `app: ingresslink` is also used in the Ingress Controller service.
 
 3. Create an IngressClass resource (for Kubernetes >= 1.18):
 
