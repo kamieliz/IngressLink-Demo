@@ -144,10 +144,6 @@ Under the args section, uncomment the following:
 - -ingresslink=nginx-ingress
 - -report-ingress-status
 ```
-Apply changes
-```other
-oc apply -f nginx-config/deployment-nginx-ingress.yaml
-```
 
 3. Create an IngressClass resource:
 ```other
