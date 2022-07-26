@@ -148,13 +148,19 @@ Apply changes
 oc apply -f ~/kubernetes-ingress/deployments/deployment/nginx-ingress.yaml
 ```
 
-3. Review previously created service for the Ingress Controller pods
+3. Create an IngressClass resource:
+```other
+oc apply -f nginx-config/ingress-class.yaml
+```
+**Note**: The Ingress Controller will fail to start without an IngressClass resource
+
+4. Review previously created service for the Ingress Controller pods
 
 ```other
 nano ~/1_kubernetes-ingress/deployments/service/nodeport_custom.yaml
 ```
 
-4. Verify NGINX ingress deployment
+5. Verify NGINX ingress deployment
 
 ```other
 oc get pods -n nginx-ingress
@@ -188,7 +194,7 @@ oc create -f ingress-example/cafe-secret.yaml
 oc create -f ingress-example/cafe-ingress.yaml
 ```
 
-. Access the application to test traffic by running the following command
+4. Access the application to test traffic by running the following command
 
 ```other
 $ curl --resolve cafe.example.com:443:10.1.1.12 https://cafe.example.com:443/coffee --insecure
@@ -205,7 +211,7 @@ Server name: tea-6fb46d899f-9j4zj
 ...
 ```
 
-. Check the status of the cafe-ingress, you should see the IP of the VirtualServerAddress
+5. Check the status of the cafe-ingress, you should see the IP of the VirtualServerAddress
 
 ```other
 $ oc get ing cafe-ingress
