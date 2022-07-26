@@ -1,0 +1,133 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ingress
+  uid: 1129c886-4fdc-4807-bcc7-adba8b422e8e
+  resourceVersion: '17718336'
+  creationTimestamp: '2022-02-07T07:22:35Z'
+  labels:
+    app: nginx-ingress
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: >
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"nginx-ingress"},"name":"nginx-ingress","namespace":"nginx-ingress"},"spec":{"externalTrafficPolicy":"Local","ports":[{"name":"http","nodePort":30080,"port":80,"protocol":"TCP","targetPort":80},{"name":"transport-tcp","nodePort":30081,"port":81,"protocol":"TCP","targetPort":81},{"name":"https","nodePort":30443,"port":443,"protocol":"TCP","targetPort":443},{"name":"readiness-port","nodePort":32081,"port":8081,"protocol":"TCP","targetPort":8081},{"name":"dashboard","nodePort":32080,"port":8080,"protocol":"TCP","targetPort":8080},{"name":"prometheus","nodePort":32113,"port":9113,"protocol":"TCP","targetPort":9113}],"selector":{"app":"nginx-ingress"},"type":"NodePort"}}
+  managedFields:
+    - manager: kubectl-create
+      operation: Update
+      apiVersion: v1
+      time: '2022-02-07T07:22:35Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:ports':
+            .: {}
+            'k:{"port":80,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":443,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector':
+            .: {}
+            'f:app': {}
+          'f:sessionAffinity': {}
+    - manager: kubectl-client-side-apply
+      operation: Update
+      apiVersion: v1
+      time: '2022-06-27T19:21:58Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:kubectl.kubernetes.io/last-applied-configuration': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+        'f:spec':
+          'f:externalTrafficPolicy': {}
+          'f:ports':
+            'k:{"port":80,"protocol":"TCP"}':
+              'f:nodePort': {}
+            'k:{"port":81,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:nodePort': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":443,"protocol":"TCP"}':
+              'f:nodePort': {}
+            'k:{"port":8080,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:nodePort': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":8081,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:nodePort': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+            'k:{"port":9113,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:nodePort': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:type': {}
+spec:
+  clusterIP: 192.168.1.250
+  externalTrafficPolicy: Local
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+    - name: transport-tcp
+      protocol: TCP
+      port: 81
+      targetPort: 81
+      nodePort: 30081
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+      nodePort: 30443
+    - name: readiness-port
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 32081
+    - name: dashboard
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 32080
+    - name: prometheus
+      protocol: TCP
+      port: 9113
+      targetPort: 9113
+      nodePort: 32113
+  clusterIPs:
+    - 192.168.1.250
+  type: NodePort
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: nginx-ingress
+status:
+  loadBalancer: {}
