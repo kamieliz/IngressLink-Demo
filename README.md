@@ -66,7 +66,19 @@ cd IngressLink-Demo/
 ### Section 3: Deploy the CIS Controller
 Container Ingress Services (CIS) can be deployed on Kubernetes and OpenShift platform. CIS installation may differ based on the resources (for example: ConfigMap, Ingress, Routes, and CRD) used to expose the Kubernetes services. CIS Installation also depends on BIG-IP deployment and Kubernetes cluster networking. To find out more about installing CIS, check out the documentation [here](https://clouddocs.f5.com/containers/latest/userguide/cis-helm.html).
 
-1. Review the bigip address, partition, and other details in CIS deployment file
+1. Create IngressLink Custom Resource definition:
+
+```other
+oc apply -f https://raw.githubusercontent.com/F5Networks/k8s-bigip-ctlr/master/docs/config_examples/customResourceDefinitions/customresourcedefinitions.yml
+```
+
+2. Create a cluster role and cluster role binding on the OpenShift cluster
+
+```other
+oc apply -f https://raw.githubusercontent.com/F5Networks/k8s-bigip-ctlr/master/docs/config_examples/rbac/clusterrole.yaml
+```
+
+3. Review the bigip address, partition, and other details in CIS deployment file
 
 ```other
 nano cis/deployment-k8s-bigip-ctlr-deployment.yaml
@@ -82,7 +94,7 @@ nano cis/deployment-k8s-bigip-ctlr-deployment.yaml
 "—custom-resource-mode=true"
 ```
 
-2. Verify CIS Deployment
+4. Verify CIS Deployment
 
 ```other
 oc get pods -n kube-system
