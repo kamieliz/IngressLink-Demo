@@ -231,7 +231,8 @@ Server name: tea-6fb46d899f-9j4zj
 
 6. You can also access the application from the browser
 
-![image](https://user-images.githubusercontent.com/4666871/181070412-2bcfeb09-5bff-42ab-8568-453cc3dbeec1.png)
+![image](https://user-images.githubusercontent.com/4666871/181071419-75a27eaf-9712-4b3a-870f-c0df1d7b0767.png)
+
 
 7. View the requests in the NGINX dashboard under cafe.example.com
 
