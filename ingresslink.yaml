@@ -4,7 +4,7 @@ metadata:
   name: nginx-ingress
   namespace: nginx-ingress
 spec:
-  virtualServerAddress: "10.1.1.12"
+  virtualServerAddress: "<big-ip-url-here>"
   host: cafe.example.com
   iRules:
     - /Common/Proxy_Protocol_iRule
